@@ -30,6 +30,7 @@
     "@nestjs/core": "^6.7.2",
     "@nestjs/platform-express": "^6.7.2",
     "commander": "^4.1.0",
+    "data-store": "^4.0.3",
     "date-fns": "^2.9.0",
     "inquirer": "^7.0.3",
     "nestjs-console": "^2.0.1",

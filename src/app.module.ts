@@ -2,6 +2,10 @@ import { Module } from '@nestjs/common';
 import { ConsoleModule } from 'nestjs-console';
 import { TimeCommand } from './time.command';
 import { TotalCommand } from './total.command';
+import { SaveCommand } from './save.command';
+import { AppendCommand } from './append.command';
+import { TodayCommand } from './today.command';
+import { ClearCommand } from './clear.command';
 
 @Module({
   imports  : [
@@ -10,6 +14,10 @@ import { TotalCommand } from './total.command';
   providers: [
     TimeCommand,
     TotalCommand,
+    SaveCommand,
+    AppendCommand,
+    TodayCommand,
+    ClearCommand,
   ],
 })
 export class AppModule
