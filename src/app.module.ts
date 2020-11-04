@@ -6,6 +6,7 @@ import { SaveCommand } from './save.command';
 import { AppendCommand } from './append.command';
 import { TodayCommand } from './today.command';
 import { ClearCommand } from './clear.command';
+import { AllCommand } from './all.command';
 
 @Module({
   imports  : [
@@ -18,6 +19,7 @@ import { ClearCommand } from './clear.command';
     AppendCommand,
     TodayCommand,
     ClearCommand,
+    AllCommand,
   ],
 })
 export class AppModule

@@ -1,15 +1,8 @@
-import {
-    Command,
-    Console,
-} from 'nestjs-console';
-import {
-    addMinutes,
-    Duration,
-    format,
-    formatDistanceToNow,
-} from 'date-fns';
-import { prompt } from 'inquirer';
-import { Store } from 'data-store';
+import {Command, Console,} from 'nestjs-console';
+import {addMinutes, Duration, format, formatDistanceToNow,} from 'date-fns';
+import {prompt} from 'inquirer';
+import {Store} from 'data-store';
+import * as chalk from 'chalk';
 
 @Console()
 export class TodayCommand
@@ -30,8 +23,9 @@ export class TodayCommand
         };
 
         const existingDays: Duration[] = JSON.parse(this.store.get('days') || '[]');
+        const today = await this.getToday();
 
-        existingDays.push(await this.getToday());
+        existingDays.push(today);
 
         existingDays.forEach(time => {
             aim.hours += 8;
@@ -45,12 +39,23 @@ export class TodayCommand
             hours  : aim.hours - calculated.hours,
             minutes: aim.minutes - calculated.minutes,
         };
-        const remainingDate = addMinutes(new Date(), (remaining.hours * 60) + remaining.minutes);
-        const relativeRemaining = formatDistanceToNow(remainingDate, { addSuffix: true });
-        const preciseRemaining = format(remainingDate, 'HH:mm');
+        const remainingToday: Duration = {
+            hours  : 8 - today.hours,
+            minutes: 45 - today.minutes,
+        };
+
+        const {
+            relative: relativeRemaining,
+            precise: preciseRemaining,
+        } = TodayCommand.getRemaining(remaining);
+        const {
+            relative: relativeRemainingToday,
+            precise: preciseRemainingToday,
+        } = TodayCommand.getRemaining(remainingToday);
 
         console.log('');
-        console.log(`you can leave ${ relativeRemaining } (${ preciseRemaining })`);
+        console.log(chalk`{bold you can leave {magenta ${ relativeRemaining }} ({magenta ${ preciseRemaining }})}`);
+        console.log(chalk`{dim today only: {cyan ${ relativeRemainingToday }} ({cyan ${ preciseRemainingToday }})}`);
     }
 
     private async getToday(): Promise<Duration> {
@@ -69,5 +74,14 @@ export class TodayCommand
             hours  : +parsed.groups.hours,
             minutes: +parsed.groups.minutes,
         };
+    }
+
+    private static getRemaining(remaining: Duration) {
+        const remainingDate = addMinutes(new Date(), (remaining.hours * 60) + remaining.minutes);
+
+        return {
+            relative: formatDistanceToNow(remainingDate, { addSuffix: true }),
+            precise: format(remainingDate, 'HH:mm'),
+        }
     }
 }
