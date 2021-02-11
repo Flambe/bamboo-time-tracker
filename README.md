@@ -53,3 +53,4 @@ Show how much time you have left today, including all days saved with the `save`
 Usage: ```btt clear```
 
 Clears all saved days
+
